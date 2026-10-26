@@ -2,7 +2,7 @@ package org.daycompass.android.usage
 
 import org.daycompass.android.buffer.BufferDao
 import org.daycompass.android.buffer.BufferedEvent
-import org.daycompass.android.buffer.CollectorState
+import org.daycompass.android.buffer.FakeBufferDao
 import org.daycompass.android.usage.UsageEventKind.Paused
 import org.daycompass.android.usage.UsageEventKind.Resumed
 import org.junit.Assert.assertEquals
@@ -102,24 +102,5 @@ class UsageCollectorTest {
 
         assertEquals(emptyList<Pair<Long, Long>>(), windows)
         assertEquals(1_000_000L, dao.state?.cursorMillis)
-    }
-}
-
-private class FakeBufferDao : BufferDao {
-    var state: CollectorState? = null
-    val events = linkedMapOf<String, BufferedEvent>()
-
-    override fun collectorState() = state
-
-    override fun startCollecting(state: CollectorState) {
-        if (this.state == null) this.state = state
-    }
-
-    override fun saveCollectorState(state: CollectorState) {
-        this.state = state
-    }
-
-    override fun insertEvents(events: List<BufferedEvent>) {
-        events.forEach { this.events.putIfAbsent(it.eventId, it) }
     }
 }
