@@ -1,0 +1,25 @@
+title = "Daycompass Android gitleaks config"
+
+[extend]
+# Start from gitleaks' default ruleset and add our own rule on top.
+useDefault = true
+
+[[rules]]
+id = "daycompass-app-token"
+description = "Daycompass application token (dc<letter>_ prefixed)"
+# Same rule as the backend repo: dcs_ (session), dcb_ (bootstrap/setup),
+# dcd_ (device), dci_ (invite), and whatever comes next. The body is 32
+# random bytes in base64url without padding, which is always exactly 43
+# characters.
+#
+# Deliberately unanchored: a token embedded in a longer string should still
+# be caught. A consequence is that a 44-character body also matches, via its
+# first 43 characters - over-matching is the right failure direction here.
+regex = '''dc[a-z]_[A-Za-z0-9_-]{43}'''
+# No `keywords` on purpose. Gitleaks treats keywords as a hard pre-filter, so
+# listing a few prefixes would silently skip every other prefix letter.
+#
+# `scripts/gitleaks-rules.sh` pins this behaviour.
+
+# No allowlist entries. Paths/patterns are only added here after a real false
+# positive occurs, each one commented with why.
