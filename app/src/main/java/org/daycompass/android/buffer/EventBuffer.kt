@@ -78,6 +78,10 @@ interface BufferDao {
 
     @Query("SELECT COUNT(*) FROM buffered_event")
     fun eventCount(): Int
+
+    /** Most recently collected first, for a status screen — never used to decide what to send. */
+    @Query("SELECT * FROM buffered_event ORDER BY startTs DESC, eventId DESC LIMIT :limit")
+    fun recentEvents(limit: Int): List<BufferedEvent>
 }
 
 @Database(entities = [BufferedEvent::class, CollectorState::class], version = 1)

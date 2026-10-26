@@ -27,4 +27,10 @@ class FakeBufferDao : BufferDao {
     }
 
     override fun eventCount() = events.size
+
+    override fun recentEvents(limit: Int) =
+        events.values
+            .sortedWith(
+                compareByDescending<BufferedEvent> { it.startTs }.thenByDescending { it.eventId },
+            ).take(limit)
 }
