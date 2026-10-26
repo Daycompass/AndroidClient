@@ -25,6 +25,8 @@
     <string name="pairing_error_code_missing">Enter the pairing code from your dashboard.</string>
     <string name="pairing_error_invalid_code">That code didn\'t work. A code works once and expires after 10 minutes. Create a new one in your dashboard.</string>
     <string name="pairing_error_invalid_device_name">Use 1 to 64 characters for the device name.</string>
+    <string name="pairing_error_link_unsupported_version">This pairing link needs a newer version of the app.</string>
+    <string name="pairing_error_link_invalid">That QR code or link isn\'t a Daycompass pairing link.</string>
     <string name="pairing_error_device_limit">Your account has reached its device limit. Remove a device in your dashboard, then try the same code again.</string>
     <plurals name="pairing_error_rate_limited">
         <item quantity="one">Too many attempts. Try again in %d minute.</item>
