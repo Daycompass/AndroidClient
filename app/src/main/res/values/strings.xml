@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Daycompass</string>
+    <string name="placeholder_title">Daycompass</string>
+    <string name="placeholder_body">Not set up yet.</string>
+</resources>

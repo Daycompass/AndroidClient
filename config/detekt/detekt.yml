@@ -1,0 +1,15 @@
+# Built on top of the detekt defaults (buildUponDefaultConfig = true).
+style:
+  MaxLineLength:
+    maxLineLength: 120
+  UnusedPrivateMember:
+    ignoreAnnotated:
+      - Preview
+naming:
+  FunctionNaming:
+    ignoreAnnotated:
+      - Composable
+complexity:
+  LongMethod:
+    ignoreAnnotated:
+      - Composable

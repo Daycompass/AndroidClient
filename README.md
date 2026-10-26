@@ -21,3 +21,14 @@ The API this client talks to is documented in the backend repository:
 ## License
 
 [AGPL-3.0-only](LICENSE)
+
+## Development
+
+Requirements: JDK 21 and an Android SDK (set `sdk.dir` in `local.properties`).
+
+```
+./gradlew ktlintCheck detekt lint testDebugUnitTest assembleDebug
+```
+
+See `CLAUDE.md` for conventions and for how to regenerate
+`gradle/verification-metadata.xml` after changing dependencies.
