@@ -1,7 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Daycompass</string>
-    <string name="placeholder_title">Daycompass</string>
-    <string name="placeholder_body">Not set up yet.</string>
     <string name="button_loading">Loading</string>
+
+    <string name="pairing_title">Connect this device</string>
+    <string name="pairing_intro">Create a pairing code in your Daycompass dashboard, then enter it here. A code works once and expires after 10 minutes.</string>
+    <string name="pairing_repair_title">Pair this device again</string>
+    <string name="pairing_repair_body">This device can\'t use its old connection anymore, for example after a restore. Nothing stored on it is lost. Create a new code to reconnect.</string>
+    <string name="pairing_server_url_label">Server URL</string>
+    <string name="pairing_server_url_placeholder">https://example.org</string>
+    <string name="pairing_server_url_helper">The address of your Daycompass server.</string>
+    <string name="pairing_code_label">Pairing code</string>
+    <string name="pairing_code_placeholder">XXXXX-XXXXX</string>
+    <string name="pairing_device_name_label">Device name</string>
+    <string name="pairing_device_name_helper">Shown in your dashboard.</string>
+    <string name="pairing_submit">Connect device</string>
+
+    <string name="pairing_error_invalid_url">That doesn\'t look like a server address. Check the URL.</string>
+    <string name="pairing_error_not_https">Daycompass only connects over HTTPS. Use an https:// address.</string>
+    <string name="pairing_error_unreachable">Can\'t reach that server. Check the URL and your connection.</string>
+    <string name="pairing_error_untrusted_certificate">This device doesn\'t trust the server\'s certificate. Ask your server admin to use a valid certificate.</string>
+    <string name="pairing_error_redirected">The server redirected the request. Enter the exact address of your Daycompass server.</string>
+    <string name="pairing_error_not_daycompass">That server doesn\'t answer like a Daycompass server. Check the URL.</string>
+    <string name="pairing_error_code_missing">Enter the pairing code from your dashboard.</string>
+    <string name="pairing_error_invalid_code">That code didn\'t work. A code works once and expires after 10 minutes. Create a new one in your dashboard.</string>
+    <string name="pairing_error_invalid_device_name">Use 1 to 64 characters for the device name.</string>
+    <string name="pairing_error_device_limit">Your account has reached its device limit. Remove a device in your dashboard, then try the same code again.</string>
+    <plurals name="pairing_error_rate_limited">
+        <item quantity="one">Too many attempts. Try again in %d minute.</item>
+        <item quantity="other">Too many attempts. Try again in %d minutes.</item>
+    </plurals>
+    <string name="pairing_error_rate_limited_unknown">Too many attempts. Try again in a few minutes.</string>
+    <string name="pairing_error_server">The server ran into a problem. Try again in a few minutes.</string>
+    <string name="pairing_error_unexpected">Something went wrong while pairing. Try again with a new code.</string>
+    <string name="pairing_error_storage">Pairing worked, but this device couldn\'t store its key. Create a new code and try again.</string>
+
+    <string name="connected_title">Connected</string>
+    <string name="connected_body">This device is paired with %1$s.</string>
+    <string name="connected_next">Screen time tracking comes in a later version of the app.</string>
 </resources>

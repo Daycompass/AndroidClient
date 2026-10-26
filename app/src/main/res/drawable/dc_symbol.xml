@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The design system's daycompass-symbol.svg. Use at 24dp and up. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="64dp"
+    android:height="64dp"
+    android:viewportWidth="64"
+    android:viewportHeight="64">
+    <path
+        android:fillColor="#D99A00"
+        android:pathData="M5,34a27,27 0,1 0,54 0a27,27 0,1 0,-54 0z" />
+    <path
+        android:fillColor="#FFC21A"
+        android:pathData="M5,31a27,27 0,1 0,54 0a27,27 0,1 0,-54 0z" />
+    <path
+        android:fillColor="#23202E"
+        android:pathData="M44.21,16.45L37.36,35.50L26.64,26.50Z"
+        android:strokeWidth="2"
+        android:strokeColor="#23202E"
+        android:strokeLineJoin="round" />
+    <path
+        android:fillColor="#C2255C"
+        android:pathData="M19.79,45.55L37.36,35.50L26.64,26.50Z"
+        android:strokeWidth="2"
+        android:strokeColor="#C2255C"
+        android:strokeLineJoin="round" />
+    <path
+        android:fillColor="#FFF8EC"
+        android:pathData="M28.8,31a3.2,3.2 0,1 0,6.4 0a3.2,3.2 0,1 0,-6.4 0z" />
+</vector>
