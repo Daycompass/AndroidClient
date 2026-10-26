@@ -126,6 +126,23 @@ class DeviceSetupTest {
     }
 
     @Test
+    fun failedRepairingNeverPairsTheOldTokenWithTheNewServer() {
+        val cipher = SoftwareTokenCipher()
+        server.enqueue(pairResponse(TestValues.tokenValue()))
+        setup(cipher).pair(server.url("/"), TestValues.pairingCode(), "Pixel 8")
+        serverFile.delete()
+        server.enqueue(pairResponse(TestValues.tokenValue()))
+        val repairing = setup(EncryptionFailsCipher(cipher))
+
+        assertEquals(
+            PairingError.StorageFailed,
+            repairing.pair(server.url("/other/"), TestValues.pairingCode(), "Pixel 8"),
+        )
+
+        assertEquals(SetupState.NotPaired, repairing.load())
+    }
+
+    @Test
     fun tokenWithoutAKnownServerNeedsRepairing() {
         server.enqueue(pairResponse(TestValues.tokenValue()))
         val setup = setup()
@@ -179,4 +196,19 @@ private class BrokenCipher : TokenCipher {
         ivAndCiphertext: ByteArray,
         associatedData: ByteArray,
     ): ByteArray = throw KeyStoreException("keystore unavailable")
+}
+
+/** Can still read what [delegate] wrote, but can no longer store anything new. */
+private class EncryptionFailsCipher(
+    private val delegate: TokenCipher,
+) : TokenCipher {
+    override fun encrypt(
+        plaintext: ByteArray,
+        associatedData: ByteArray,
+    ): ByteArray = throw KeyStoreException("keystore unavailable")
+
+    override fun decrypt(
+        ivAndCiphertext: ByteArray,
+        associatedData: ByteArray,
+    ): ByteArray = delegate.decrypt(ivAndCiphertext, associatedData)
 }

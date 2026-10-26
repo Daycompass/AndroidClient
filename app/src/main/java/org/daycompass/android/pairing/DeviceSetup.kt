@@ -67,6 +67,9 @@ class DeviceSetup(
         val result = clientFor(serverUrl).pair(pairingCode, deviceName)
         if (result !is ApiResult.Success) return result.toPairingError()
         return try {
+            // Drop any old token first: if saving the new one fails, an old token must never
+            // end up next to the new server's URL and be sent there.
+            tokenStore.clear()
             writeServerUrl(serverUrl)
             tokenStore.save(result.value.token)
             null
