@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import org.daycompass.android.buffer.BufferScreen
 import org.daycompass.android.pairing.ConnectedScreen
 import org.daycompass.android.pairing.PairingScreen
 import org.daycompass.android.pairing.Screen
@@ -57,11 +58,27 @@ private fun DaycompassApp(viewModel: SetupViewModel) {
         }
 
         is Screen.Connected -> {
-            // Paired but not allowed to read usage yet, or access was taken away again.
-            if (viewModel.usageAccess) {
-                ConnectedScreen(screen.serverHost, screen.status)
-            } else {
-                UsageAccessScreen(screen.serverHost)
+            when {
+                // Paired but not allowed to read usage yet, or access was taken away again.
+                !viewModel.usageAccess -> {
+                    UsageAccessScreen(screen.serverHost)
+                }
+
+                screen.showingBuffer -> {
+                    BufferScreen(
+                        events = viewModel.bufferedEvents,
+                        totalCount = screen.status.pendingEvents,
+                        onBack = viewModel::hideBufferedEvents,
+                    )
+                }
+
+                else -> {
+                    ConnectedScreen(
+                        serverHost = screen.serverHost,
+                        status = screen.status,
+                        onShowBuffer = viewModel::showBufferedEvents,
+                    )
+                }
             }
         }
     }

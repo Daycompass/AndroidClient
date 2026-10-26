@@ -22,6 +22,10 @@ has run on a phone or against a real server yet. There is no release build.
    backoff after a failure. There is no Wi-Fi detection, so the home network,
    a VPN such as Tailscale and public servers all work. Offline entries stay
    on the device until the server has confirmed them.
+5. **Check the local buffer** from the connected screen: a list of the
+   entries still waiting to be sent (package name, collected time, duration).
+   This reads only the device's own buffer — the app never reads events back
+   from the server.
 
 The connected screen always says in words when the device last synced, how
 many entries are waiting, and whether the device clock is off.

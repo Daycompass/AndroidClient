@@ -62,4 +62,22 @@
     <string name="usage_access_never_before">Anything from before you paired this device</string>
     <string name="usage_access_open_settings">Open settings</string>
     <string name="usage_access_hint">Find Daycompass in the list, turn on usage access, then come back here.</string>
+
+    <string name="buffer_show">View buffered entries</string>
+    <string name="buffer_title">Waiting to be sent</string>
+    <string name="buffer_empty">Nothing buffered right now.</string>
+    <string name="buffer_back">Back</string>
+    <plurals name="buffer_truncated">
+        <item quantity="one">Showing the %d most recently collected entry.</item>
+        <item quantity="other">Showing the %d most recently collected entries.</item>
+    </plurals>
+    <string name="buffer_duration_minutes">%1$d min</string>
+    <plurals name="buffer_duration_seconds">
+        <item quantity="one">%d sec</item>
+        <item quantity="other">%d sec</item>
+    </plurals>
+    <plurals name="buffer_count">
+        <item quantity="one">%d entry stored on this device, not sent yet.</item>
+        <item quantity="other">%d entries stored on this device, not sent yet.</item>
+    </plurals>
 </resources>

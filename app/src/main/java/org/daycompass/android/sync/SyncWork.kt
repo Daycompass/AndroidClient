@@ -14,6 +14,7 @@ import androidx.work.WorkManager
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import org.daycompass.android.buffer.BufferDatabase
+import org.daycompass.android.buffer.BufferedEvent
 import org.daycompass.android.pairing.DeviceSetup
 import org.daycompass.android.usage.UsageCollection
 import org.daycompass.android.usage.hasUsageAccess
@@ -35,6 +36,9 @@ object Sync {
     private const val LAST_SYNC = "last_sync_millis"
     private const val NOT_BEFORE = "not_before_millis"
     private const val MILLIS_PER_SECOND = 1_000L
+
+    /** Caps the status screen's list; the buffer itself has no such limit. */
+    private const val BUFFER_DISPLAY_LIMIT = 200
 
     @Volatile private var engine: EventSync? = null
 
@@ -100,6 +104,10 @@ object Sync {
     fun lastSyncMillis(context: Context): Long? = prefs(context).getLong(LAST_SYNC, 0).takeIf { it > 0 }
 
     fun pendingEvents(context: Context): Int = BufferDatabase.get(context).bufferDao().eventCount()
+
+    /** The most recently collected entries still waiting to be sent, newest first. */
+    fun bufferedEvents(context: Context): List<BufferedEvent> =
+        BufferDatabase.get(context).bufferDao().recentEvents(BUFFER_DISPLAY_LIMIT)
 
     private fun prefs(context: Context) = context.applicationContext.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
 }

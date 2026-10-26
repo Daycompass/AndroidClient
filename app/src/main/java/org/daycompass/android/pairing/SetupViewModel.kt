@@ -11,6 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.daycompass.android.buffer.BufferedEvent
 import org.daycompass.android.sync.DeviceCheck
 import org.daycompass.android.sync.Sync
 import org.daycompass.android.sync.SyncResult
@@ -40,6 +41,7 @@ sealed interface Screen {
     data class Connected(
         val serverHost: String,
         val status: SyncStatus = SyncStatus(),
+        val showingBuffer: Boolean = false,
     ) : Screen
 }
 
@@ -66,6 +68,10 @@ class SetupViewModel(
 
     /** Whether the user granted usage access; checked again every time the app comes back. */
     var usageAccess by mutableStateOf(hasUsageAccess(application))
+        private set
+
+    /** The buffer status screen's list, loaded on demand rather than kept live. */
+    var bufferedEvents by mutableStateOf<List<BufferedEvent>>(emptyList())
         private set
 
     /** Called from the activity's onResume, for example after returning from the settings. */
@@ -131,6 +137,18 @@ class SetupViewModel(
 
     private fun showRepairing() {
         screen = Screen.Pairing(repairing = true)
+    }
+
+    fun showBufferedEvents() {
+        val connected = screen as? Screen.Connected ?: return
+        screen = connected.copy(showingBuffer = true)
+        viewModelScope.launch {
+            bufferedEvents = withContext(Dispatchers.IO) { Sync.bufferedEvents(getApplication()) }
+        }
+    }
+
+    fun hideBufferedEvents() {
+        (screen as? Screen.Connected)?.let { screen = it.copy(showingBuffer = false) }
     }
 
     fun onServerUrlChange(value: String) {

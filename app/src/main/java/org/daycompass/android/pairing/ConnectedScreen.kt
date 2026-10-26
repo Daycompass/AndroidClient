@@ -2,6 +2,8 @@ package org.daycompass.android.pairing
 
 import android.text.format.DateFormat
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -17,8 +19,11 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import org.daycompass.android.R
 import org.daycompass.android.sync.SyncResult
+import org.daycompass.android.ui.components.DcButton
+import org.daycompass.android.ui.components.DcButtonVariant
 import org.daycompass.android.ui.theme.DaycompassTheme
 import org.daycompass.android.ui.theme.Dc
+import org.daycompass.android.ui.theme.DcSpacing
 import java.util.Date
 import kotlin.math.abs
 
@@ -30,6 +35,7 @@ private const val SECONDS_PER_MINUTE = 60L
 fun ConnectedScreen(
     serverHost: String,
     status: SyncStatus,
+    onShowBuffer: () -> Unit,
 ) {
     ScreenColumn {
         Image(
@@ -69,6 +75,12 @@ fun ConnectedScreen(
                 color = Dc.colors.warning,
             )
         }
+        DcButton(
+            text = stringResource(R.string.buffer_show),
+            onClick = onShowBuffer,
+            variant = DcButtonVariant.Neutral,
+            modifier = Modifier.fillMaxWidth().padding(top = DcSpacing.space2),
+        )
     }
 }
 
@@ -95,6 +107,7 @@ private fun ConnectedScreenPreview() {
         ConnectedScreen(
             serverHost = "example.org",
             status = SyncStatus(syncing = false, lastResult = SyncResult.Unreachable, pendingEvents = 42),
+            onShowBuffer = {},
         )
     }
 }
