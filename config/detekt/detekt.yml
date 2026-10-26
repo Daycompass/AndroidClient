@@ -13,3 +13,7 @@ complexity:
   LongMethod:
     ignoreAnnotated:
       - Composable
+  # Compose API guidelines favour flat, defaulted parameters over option objects.
+  LongParameterList:
+    ignoreAnnotated:
+      - Composable
