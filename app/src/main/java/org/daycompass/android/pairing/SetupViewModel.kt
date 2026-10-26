@@ -15,6 +15,7 @@ import org.daycompass.android.sync.DeviceCheck
 import org.daycompass.android.sync.Sync
 import org.daycompass.android.sync.SyncResult
 import org.daycompass.android.usage.UsageCollection
+import org.daycompass.android.usage.hasUsageAccess
 
 /** The pairing form. [toString] leaves the pairing code out so it can never end up in a log. */
 data class PairingForm(
@@ -62,6 +63,19 @@ class SetupViewModel(
 
     var form by mutableStateOf(PairingForm(deviceName = defaultDeviceName(Build.MODEL)))
         private set
+
+    /** Whether the user granted usage access; checked again every time the app comes back. */
+    var usageAccess by mutableStateOf(hasUsageAccess(application))
+        private set
+
+    /** Called from the activity's onResume, for example after returning from the settings. */
+    fun onResume() {
+        val granted = hasUsageAccess(getApplication())
+        val newlyGranted = granted && !usageAccess
+        usageAccess = granted
+        // Show the first data right away instead of waiting for the next background run.
+        if (newlyGranted && screen is Screen.Connected) syncNow(checkDevice = false)
+    }
 
     init {
         viewModelScope.launch {

@@ -51,4 +51,15 @@
         <item quantity="one">This device\'s clock is off by about %d minute. Turn on automatic time in the system settings, or the server may refuse your screen time.</item>
         <item quantity="other">This device\'s clock is off by about %d minutes. Turn on automatic time in the system settings, or the server may refuse your screen time.</item>
     </plurals>
+
+    <string name="usage_access_title">Allow usage access</string>
+    <string name="usage_access_intro">Daycompass uses Android\'s usage access to see which app is open and for how long, and sends that to %1$s. Nothing is collected until you allow it.</string>
+    <string name="usage_access_sent_title">What goes to your server</string>
+    <string name="usage_access_sent_apps">The package name of each app you use, like org.mozilla.firefox</string>
+    <string name="usage_access_sent_times">When you opened it and for how long</string>
+    <string name="usage_access_never_title">What Daycompass never collects</string>
+    <string name="usage_access_never_content">What you do inside apps: messages, websites, photos or your location</string>
+    <string name="usage_access_never_before">Anything from before you paired this device</string>
+    <string name="usage_access_open_settings">Open settings</string>
+    <string name="usage_access_hint">Find Daycompass in the list, turn on usage access, then come back here.</string>
 </resources>
