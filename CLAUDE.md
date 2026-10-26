@@ -101,6 +101,8 @@ the diff of the metadata file like code.
   `scripts/gh-project.sh`.
 - Small conventional commits: `feat:`, `fix:`, `chore:`, `docs:`, `refactor:`,
   `test:`.
+- Every PR that changes what the app does also updates `README.md` (status,
+  features, what is sent, requirements) in the same PR.
 - Before calling something done: run format check, detekt, lint, unit tests,
   report the output verbatim, then `git diff --stat`, then an explicit list of
   anything touching token storage, networking, privacy or the wire format.
