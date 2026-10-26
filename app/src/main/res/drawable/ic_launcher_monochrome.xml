@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The design system's mono symbol: needle knocked out of the disc, tail as a smaller triangle. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <group
+        android:scaleX="1.001953"
+        android:scaleY="1.001953"
+        android:translateX="21.9375"
+        android:translateY="21.43125">
+        <path
+            android:fillColor="#000000"
+            android:fillType="evenOdd"
+            android:pathData="M5,31a27,27 0,1 0,54 0a27,27 0,1 0,-54 0z M44.86,15.68L38.28,36.27L19.14,46.32L25.72,25.73Z" />
+        <path
+            android:fillColor="#000000"
+            android:pathData="M22.40,42.44L34.27,36.21L26.48,29.67Z"
+            android:strokeWidth="1.2"
+            android:strokeColor="#000000"
+            android:strokeLineJoin="round" />
+    </group>
+</vector>

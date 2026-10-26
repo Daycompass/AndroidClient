@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Ink, the app icon background from the design system. -->
+    <color name="ic_launcher_background">#23202E</color>
+    <!-- Design system token bg, shown before Compose draws its first frame. -->
+    <color name="window_background">#FFF8EC</color>
+</resources>

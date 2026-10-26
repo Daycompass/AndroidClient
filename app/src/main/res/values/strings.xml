@@ -3,4 +3,5 @@
     <string name="app_name">Daycompass</string>
     <string name="placeholder_title">Daycompass</string>
     <string name="placeholder_body">Not set up yet.</string>
+    <string name="button_loading">Loading</string>
 </resources>
