@@ -37,6 +37,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.daycompass.android.R
 import org.daycompass.android.ui.components.DcButton
+import org.daycompass.android.ui.components.DcButtonVariant
 import org.daycompass.android.ui.components.DcTextField
 import org.daycompass.android.ui.theme.DaycompassTheme
 import org.daycompass.android.ui.theme.Dc
@@ -52,6 +53,7 @@ fun PairingScreen(
     onPairingCodeChange: (String) -> Unit,
     onDeviceNameChange: (String) -> Unit,
     onSubmit: () -> Unit,
+    onScanQrCode: () -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
     val next = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Down) })
@@ -75,6 +77,14 @@ fun PairingScreen(
             text = stringResource(if (repairing) R.string.pairing_repair_body else R.string.pairing_intro),
             style = Dc.type.bodyLg,
             color = Dc.colors.textMuted,
+        )
+        DcButton(
+            text = stringResource(R.string.pairing_scan_qr_code),
+            onClick = onScanQrCode,
+            variant = DcButtonVariant.Secondary,
+            enabled = !form.busy,
+            large = true,
+            modifier = Modifier.fillMaxWidth(),
         )
         DcTextField(
             value = form.serverUrl,
@@ -166,7 +176,7 @@ internal fun ScreenColumn(content: @Composable () -> Unit) {
 
 /** An error that belongs to no single field. Announced right away, shown with an icon. */
 @Composable
-private fun GeneralError(message: String) {
+internal fun GeneralError(message: String) {
     val colors = Dc.colors
     Row(
         horizontalArrangement = Arrangement.spacedBy(DcSpacing.space2),
@@ -188,7 +198,7 @@ private fun GeneralError(message: String) {
 }
 
 @Composable
-private fun PairingError.message(): String {
+internal fun PairingError.message(): String {
     val minutes = (this as? PairingError.RateLimited)?.let { retryAfterMinutes(it.retryAfterSeconds) }
     return if (minutes != null) {
         pluralStringResource(R.plurals.pairing_error_rate_limited, minutes, minutes)
@@ -216,6 +226,7 @@ private fun PairingScreenPreview() {
             onPairingCodeChange = {},
             onDeviceNameChange = {},
             onSubmit = {},
+            onScanQrCode = {},
         )
     }
 }

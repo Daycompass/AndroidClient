@@ -15,6 +15,18 @@
     <string name="pairing_device_name_label">Device name</string>
     <string name="pairing_device_name_helper">Shown in your dashboard.</string>
     <string name="pairing_submit">Connect device</string>
+    <string name="pairing_scan_qr_code">Scan QR code</string>
+
+    <string name="pairing_link_confirm_title">Connect to this server?</string>
+    <string name="pairing_link_confirm_body">This came from a QR code or shared link. Make sure it\'s your school\'s Daycompass server before connecting.</string>
+    <string name="pairing_link_confirm_cancel">Enter manually instead</string>
+
+    <string name="qr_scan_title">Scan the QR code</string>
+    <string name="qr_scan_body">Point the camera at the QR code in your Daycompass dashboard.</string>
+    <string name="qr_scan_permission_denied_title">Camera access is off</string>
+    <string name="qr_scan_permission_denied_body">Daycompass needs the camera to scan a QR code. You can still enter the server and code by hand.</string>
+    <string name="qr_scan_try_again">Try again</string>
+    <string name="qr_scan_enter_manually">Enter manually</string>
 
     <string name="pairing_error_invalid_url">That doesn\'t look like a server address. Check the URL.</string>
     <string name="pairing_error_not_https">Daycompass only connects over HTTPS. Use an https:// address.</string>
