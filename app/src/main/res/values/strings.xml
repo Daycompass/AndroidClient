@@ -37,5 +37,18 @@
 
     <string name="connected_title">Connected</string>
     <string name="connected_body">This device is paired with %1$s.</string>
-    <string name="connected_next">Screen time tracking comes in a later version of the app.</string>
+    <string name="sync_running">Syncing…</string>
+    <string name="sync_done_at">Synced at %1$s.</string>
+    <string name="sync_never">Not synced yet.</string>
+    <string name="sync_unreachable">Can\'t reach your server right now. Your screen time is kept on this device and sent automatically once the server is reachable again.</string>
+    <string name="sync_rate_limited">Your server is busy. Daycompass will try again later.</string>
+    <string name="sync_server_error">Your server ran into a problem. Daycompass will try again later.</string>
+    <plurals name="sync_pending">
+        <item quantity="one">%d entry waiting to be sent.</item>
+        <item quantity="other">%d entries waiting to be sent.</item>
+    </plurals>
+    <plurals name="sync_clock_skew">
+        <item quantity="one">This device\'s clock is off by about %d minute. Turn on automatic time in the system settings, or the server may refuse your screen time.</item>
+        <item quantity="other">This device\'s clock is off by about %d minutes. Turn on automatic time in the system settings, or the server may refuse your screen time.</item>
+    </plurals>
 </resources>

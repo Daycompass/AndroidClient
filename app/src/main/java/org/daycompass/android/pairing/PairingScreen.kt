@@ -140,36 +140,9 @@ fun PairingScreen(
     }
 }
 
-@Composable
-fun ConnectedScreen(serverHost: String) {
-    ScreenColumn {
-        Image(
-            painter = painterResource(R.drawable.dc_symbol),
-            contentDescription = null,
-            modifier = Modifier.size(SYMBOL_SIZE),
-        )
-        Text(
-            text = stringResource(R.string.connected_title),
-            style = Dc.type.heading1,
-            color = Dc.colors.text,
-            modifier = Modifier.semantics { heading() },
-        )
-        Text(
-            text = stringResource(R.string.connected_body, serverHost),
-            style = Dc.type.bodyLg,
-            color = Dc.colors.text,
-        )
-        Text(
-            text = stringResource(R.string.connected_next),
-            style = Dc.type.body,
-            color = Dc.colors.textMuted,
-        )
-    }
-}
-
 /** Scrolls, keeps clear of system bars and the keyboard, and caps the width on tablets. */
 @Composable
-private fun ScreenColumn(content: @Composable () -> Unit) {
+internal fun ScreenColumn(content: @Composable () -> Unit) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier =
@@ -229,7 +202,7 @@ internal fun retryAfterMinutes(seconds: Long?): Int? =
     seconds?.let { ((it + SECONDS_PER_MINUTE - 1) / SECONDS_PER_MINUTE).coerceAtLeast(1).toInt() }
 
 private const val SECONDS_PER_MINUTE = 60L
-private val SYMBOL_SIZE = 56.dp
+internal val SYMBOL_SIZE = 56.dp
 private val MAX_CONTENT_WIDTH = 480.dp
 
 @Preview(showBackground = true, heightDp = 900)
