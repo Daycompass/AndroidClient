@@ -11,6 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.daycompass.android.usage.UsageCollection
 
 /** The pairing form. [toString] leaves the pairing code out so it can never end up in a log. */
 data class PairingForm(
@@ -50,8 +51,12 @@ class SetupViewModel(
 
     init {
         viewModelScope.launch {
+            val state = withContext(Dispatchers.IO) { setup.load() }
+            // Collection keeps running while the device waits to be paired again, so
+            // nothing is lost in between.
+            if (state != SetupState.NotPaired) UsageCollection.schedule(application)
             screen =
-                when (val state = withContext(Dispatchers.IO) { setup.load() }) {
+                when (state) {
                     SetupState.NotPaired -> Screen.Pairing(repairing = false)
                     SetupState.NeedsRepairing -> Screen.Pairing(repairing = true)
                     is SetupState.Paired -> Screen.Connected(state.serverUrl.host)
@@ -92,7 +97,9 @@ class SetupViewModel(
             // even if the screen goes away meanwhile.
             val error =
                 withContext(Dispatchers.IO + NonCancellable) {
-                    setup.pair(url.getOrThrow(), current.pairingCode, current.deviceName.trim())
+                    setup.pair(url.getOrThrow(), current.pairingCode, current.deviceName.trim()).also {
+                        if (it == null) UsageCollection.start(getApplication())
+                    }
                 }
             if (error == null) {
                 form = PairingForm(deviceName = form.deviceName)
