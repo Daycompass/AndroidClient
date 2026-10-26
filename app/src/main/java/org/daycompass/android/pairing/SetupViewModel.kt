@@ -11,6 +11,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.daycompass.android.sync.DeviceCheck
+import org.daycompass.android.sync.Sync
+import org.daycompass.android.sync.SyncResult
 import org.daycompass.android.usage.UsageCollection
 
 /** The pairing form. [toString] leaves the pairing code out so it can never end up in a log. */
@@ -35,13 +38,24 @@ sealed interface Screen {
 
     data class Connected(
         val serverHost: String,
+        val status: SyncStatus = SyncStatus(),
     ) : Screen
 }
+
+/** What the connected screen says about syncing, always in words. */
+data class SyncStatus(
+    val syncing: Boolean = true,
+    val lastResult: SyncResult? = null,
+    val lastSyncMillis: Long? = null,
+    val pendingEvents: Int = 0,
+    /** Server clock minus device clock, from the check at app start. */
+    val clockSkewSeconds: Long? = null,
+)
 
 class SetupViewModel(
     application: Application,
 ) : AndroidViewModel(application) {
-    private val setup = DeviceSetup.create(application)
+    private val setup = DeviceSetup.get(application)
 
     var screen by mutableStateOf<Screen>(Screen.Loading)
         private set
@@ -54,14 +68,55 @@ class SetupViewModel(
             val state = withContext(Dispatchers.IO) { setup.load() }
             // Collection keeps running while the device waits to be paired again, so
             // nothing is lost in between.
-            if (state != SetupState.NotPaired) UsageCollection.schedule(application)
+            if (state != SetupState.NotPaired) {
+                UsageCollection.schedule(application)
+                Sync.schedule(application)
+            }
             screen =
                 when (state) {
                     SetupState.NotPaired -> Screen.Pairing(repairing = false)
                     SetupState.NeedsRepairing -> Screen.Pairing(repairing = true)
                     is SetupState.Paired -> Screen.Connected(state.serverUrl.host)
                 }
+            if (state is SetupState.Paired) syncNow(checkDevice = true)
         }
+    }
+
+    /**
+     * Checks the device once per app start (identity and clock, never on a timer), then
+     * collects and uploads right away instead of waiting for the next background run.
+     */
+    private fun syncNow(checkDevice: Boolean) {
+        val app = getApplication<Application>()
+        viewModelScope.launch {
+            val skew =
+                if (checkDevice) {
+                    when (val check = withContext(Dispatchers.IO) { Sync.engine(app).checkDevice() }) {
+                        is DeviceCheck.Ok -> check.clockSkewSeconds
+                        DeviceCheck.NeedsRepairing -> return@launch showRepairing()
+                        DeviceCheck.Unknown -> null
+                    }
+                } else {
+                    null
+                }
+            val result = withContext(Dispatchers.IO) { Sync.runOnce(app) }
+            if (result == SyncResult.NeedsRepairing) return@launch showRepairing()
+            val status =
+                withContext(Dispatchers.IO) {
+                    SyncStatus(
+                        syncing = false,
+                        lastResult = result,
+                        lastSyncMillis = Sync.lastSyncMillis(app),
+                        pendingEvents = Sync.pendingEvents(app),
+                        clockSkewSeconds = skew,
+                    )
+                }
+            (screen as? Screen.Connected)?.let { screen = it.copy(status = status) }
+        }
+    }
+
+    private fun showRepairing() {
+        screen = Screen.Pairing(repairing = true)
     }
 
     fun onServerUrlChange(value: String) {
@@ -98,12 +153,16 @@ class SetupViewModel(
             val error =
                 withContext(Dispatchers.IO + NonCancellable) {
                     setup.pair(url.getOrThrow(), current.pairingCode, current.deviceName.trim()).also {
-                        if (it == null) UsageCollection.start(getApplication())
+                        if (it == null) {
+                            UsageCollection.start(getApplication())
+                            Sync.schedule(getApplication())
+                        }
                     }
                 }
             if (error == null) {
                 form = PairingForm(deviceName = form.deviceName)
                 screen = Screen.Connected(url.getOrThrow().host)
+                syncNow(checkDevice = false)
             } else {
                 form = form.copy(busy = false, error = error)
             }

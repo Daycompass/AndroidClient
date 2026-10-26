@@ -40,8 +40,9 @@ class DeviceSetup(
     @Synchronized
     fun load(): SetupState =
         when (val stored = tokenStore.load()) {
+            // A server without a token: the server refused the token earlier.
             StoredToken.None -> {
-                SetupState.NotPaired
+                if (serverFile.baseFile.exists()) SetupState.NeedsRepairing else SetupState.NotPaired
             }
 
             StoredToken.Unreadable -> {
@@ -74,10 +75,21 @@ class DeviceSetup(
             tokenStore.save(result.value.token)
             null
         } catch (_: IOException) {
+            serverFile.delete()
             PairingError.StorageFailed
         } catch (_: GeneralSecurityException) {
+            serverFile.delete()
             PairingError.StorageFailed
         }
+    }
+
+    /**
+     * The server refused the token (`401`): forget it so no further device request is made,
+     * keep the server URL so the app asks to pair again. The event buffer is not touched.
+     */
+    @Synchronized
+    fun markUnauthenticated() {
+        tokenStore.clear()
     }
 
     private fun readServerUrl(): HttpUrl? =
@@ -107,7 +119,15 @@ class DeviceSetup(
     companion object {
         private const val SERVER_FILE = "server_url.txt"
 
-        fun create(context: Context) =
-            DeviceSetup(DeviceTokenStore.create(context), File(context.noBackupFilesDir, SERVER_FILE))
+        @Volatile private var instance: DeviceSetup? = null
+
+        /** One instance per process, so pairing, sync and the 401 handling share one lock. */
+        fun get(context: Context): DeviceSetup =
+            instance ?: synchronized(this) {
+                instance ?: context.applicationContext.let { app ->
+                    DeviceSetup(DeviceTokenStore.create(app), File(app.noBackupFilesDir, SERVER_FILE))
+                        .also { instance = it }
+                }
+            }
     }
 }

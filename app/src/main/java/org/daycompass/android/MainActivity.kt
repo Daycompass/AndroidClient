@@ -49,7 +49,7 @@ private fun DaycompassApp(viewModel: SetupViewModel = viewModel()) {
         }
 
         is Screen.Connected -> {
-            ConnectedScreen(screen.serverHost)
+            ConnectedScreen(screen.serverHost, screen.status)
         }
     }
 }

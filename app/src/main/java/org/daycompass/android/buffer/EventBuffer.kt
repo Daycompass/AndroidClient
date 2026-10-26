@@ -69,6 +69,15 @@ interface BufferDao {
         insertEvents(events)
         saveCollectorState(state)
     }
+
+    @Query("SELECT * FROM buffered_event ORDER BY startTs, eventId LIMIT :limit")
+    fun oldestEvents(limit: Int): List<BufferedEvent>
+
+    @Query("DELETE FROM buffered_event WHERE eventId IN (:eventIds)")
+    fun deleteEvents(eventIds: List<String>)
+
+    @Query("SELECT COUNT(*) FROM buffered_event")
+    fun eventCount(): Int
 }
 
 @Database(entities = [BufferedEvent::class, CollectorState::class], version = 1)
