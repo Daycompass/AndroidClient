@@ -68,7 +68,7 @@ the diff of the metadata file like code.
 - `POST /api/v1/events`: up to 500 events / 512 KiB per batch. Event:
   `event_id` (32 lowercase hex, stable per observed event, client generated),
   `start_ts` (Unix seconds), `duration_secs` (1-86400), `app_id` (package
-  name), optional `label`, optional host (bare hostname). The response is
+  name), optional `label`, optional `domain` (bare hostname, never a URL). The response is
   per-event, positional: accepted/duplicate/rejected. Drop from the buffer on
   accepted or duplicate; rejected = permanently bad, drop and log the reason
   code. Resending is always safe (idempotent).
