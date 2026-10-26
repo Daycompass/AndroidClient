@@ -4,18 +4,15 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import org.daycompass.android.pairing.ConnectedScreen
+import org.daycompass.android.pairing.PairingScreen
+import org.daycompass.android.pairing.Screen
+import org.daycompass.android.pairing.SetupViewModel
 import org.daycompass.android.ui.theme.DaycompassTheme
 import org.daycompass.android.ui.theme.Dc
 
@@ -26,7 +23,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             DaycompassTheme {
                 Surface(modifier = Modifier.fillMaxSize(), color = Dc.colors.bg) {
-                    PlaceholderScreen()
+                    DaycompassApp()
                 }
             }
         }
@@ -34,26 +31,25 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun PlaceholderScreen() {
-    Column(
-        modifier = Modifier.fillMaxSize().padding(24.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        Text(
-            text = stringResource(R.string.placeholder_title),
-            style = Dc.type.heading1,
-        )
-        Text(
-            text = stringResource(R.string.placeholder_body),
-            style = Dc.type.bodyLg,
-            color = Dc.colors.textMuted,
-        )
-    }
-}
+private fun DaycompassApp(viewModel: SetupViewModel = viewModel()) {
+    when (val screen = viewModel.screen) {
+        Screen.Loading -> {
+            // Reading the stored token takes a moment; the window background shows meanwhile.
+        }
 
-@Preview(showBackground = true)
-@Composable
-private fun PlaceholderScreenPreview() {
-    DaycompassTheme { PlaceholderScreen() }
+        is Screen.Pairing -> {
+            PairingScreen(
+                form = viewModel.form,
+                repairing = screen.repairing,
+                onServerUrlChange = viewModel::onServerUrlChange,
+                onPairingCodeChange = viewModel::onPairingCodeChange,
+                onDeviceNameChange = viewModel::onDeviceNameChange,
+                onSubmit = viewModel::submit,
+            )
+        }
+
+        is Screen.Connected -> {
+            ConnectedScreen(screen.serverHost)
+        }
+    }
 }
