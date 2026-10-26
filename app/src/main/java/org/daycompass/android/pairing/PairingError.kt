@@ -36,6 +36,15 @@ sealed class PairingError(
 
     data object InvalidDeviceName : PairingError(PairingField.DeviceName, R.string.pairing_error_invalid_device_name)
 
+    /** `v` in a pairing link was missing or not a version this app understands. */
+    data object LinkUnsupportedVersion : PairingError(
+        PairingField.General,
+        R.string.pairing_error_link_unsupported_version,
+    )
+
+    /** A scanned or opened link was not a usable Daycompass pairing link. */
+    data object LinkInvalid : PairingError(PairingField.General, R.string.pairing_error_link_invalid)
+
     /** The code was not consumed: remove a device in the dashboard, then retry the same code. */
     data object DeviceLimitReached : PairingError(PairingField.General, R.string.pairing_error_device_limit)
 

@@ -3,6 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <!-- Only for the QR scanner; manual pairing works without a camera at all. -->
+    <uses-feature android:name="android.hardware.camera.any" android:required="false" />
     <!-- Special access the user grants in the system settings; read only with that grant. -->
     <uses-permission
         android:name="android.permission.PACKAGE_USAGE_STATS"
@@ -28,10 +31,20 @@
 
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <!-- Pairing links from the dashboard's QR code: daycompass://pair?v=1&server=...&code=... -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="daycompass"
+                    android:host="pair" />
             </intent-filter>
         </activity>
     </application>

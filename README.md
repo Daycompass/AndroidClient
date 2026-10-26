@@ -9,9 +9,14 @@ has run on a phone or against a real server yet. There is no release build.
 
 ## What it does
 
-1. **Pair** the device with your server: enter the server URL, a pairing code
-   from the Daycompass dashboard and a device name (prefilled with the device
-   model).
+1. **Pair** the device with your server: enter the server URL and a pairing
+   code from the Daycompass dashboard by hand, or scan the dashboard's QR
+   code (or open its pairing link) to fill both in automatically. Either
+   way, a device name (prefilled with the device model) and an explicit
+   confirmation of the server are needed before pairing happens — scanning
+   or opening a link never pairs the device by itself. Camera access is
+   asked for only when you tap "Scan QR code", and is entirely optional:
+   typing the server and code always works, with or without a camera.
 2. **Allow usage access** in the Android settings. The app explains first what
    is collected and what is not.
 3. **Collect** which app is in the foreground and for how long, from the
@@ -42,7 +47,11 @@ domains, no content, no location, no categories, nothing from before pairing.
   telemetry.
 - The only network destination is the Daycompass server you configure
   yourself, over HTTPS. Only certificates trusted by the system are
-  accepted; cleartext traffic is disabled.
+  accepted; cleartext traffic is disabled, including for QR/link pairing: a
+  pairing link pointing at an `http://` server is refused.
+- QR scanning is done fully on-device (no cloud or Play Services barcode
+  API); scanning or opening a pairing link never sends anything anywhere by
+  itself, and never pairs without an explicit confirmation step.
 - The device token is encrypted with an Android Keystore key and excluded
   from backups, like all other app data.
 - Dependencies are free and open source (F-Droid friendly).
