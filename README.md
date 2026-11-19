@@ -38,8 +38,11 @@ many entries are waiting, and whether the device clock is off.
 ## What is sent
 
 Per app session: the app's package name (for example `org.mozilla.firefox`),
-the start time and the duration. Nothing else: no app names, no website
-domains, no content, no location, no categories, nothing from before pairing.
+the start time and the duration, and the app's display name (for example
+"Firefox") when it can be resolved on the device. The package name is always
+the definitive identifier; the display name is only ever a label for the
+dashboard. Nothing else: no website domains, no content, no location, no
+categories, nothing from before pairing.
 
 ## Principles
 

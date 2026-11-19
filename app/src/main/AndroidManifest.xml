@@ -11,11 +11,16 @@
         android:name="android.permission.PACKAGE_USAGE_STATS"
         tools:ignore="ProtectedPermissions" />
 
-    <!-- Only to find the home screen app, whose time is not reported as app usage. -->
     <queries>
+        <!-- Only to find the home screen app, whose time is not reported as app usage. -->
         <intent>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.HOME" />
+        </intent>
+        <!-- Visibility to resolve a tracked app's display name (event label) by package name. -->
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
         </intent>
     </queries>
 

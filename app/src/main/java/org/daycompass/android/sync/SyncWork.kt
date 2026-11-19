@@ -18,6 +18,7 @@ import org.daycompass.android.buffer.BufferedEvent
 import org.daycompass.android.pairing.DeviceSetup
 import org.daycompass.android.usage.UsageCollection
 import org.daycompass.android.usage.hasUsageAccess
+import org.daycompass.android.usage.packageManagerLabelResolver
 import java.util.concurrent.TimeUnit
 
 /**
@@ -52,6 +53,7 @@ object Sync {
                     setup = DeviceSetup.get(app),
                     // Reason codes only: they say what was wrong, never what the event was.
                     logRejections = { Log.w(LOG_TAG, "server rejected events: $it") },
+                    labelFor = packageManagerLabelResolver(app.packageManager)::labelFor,
                 ).also { engine = it }
             }
         }
