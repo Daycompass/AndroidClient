@@ -3,6 +3,7 @@ package org.daycompass.android.sync
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 import mockwebserver3.MockResponse
 import mockwebserver3.MockWebServer
 import okhttp3.OkHttpClient
@@ -109,6 +110,26 @@ class EventSyncTest {
         assertEquals(listOf(mapOf("start_ts_too_old" to 1)), loggedRejections)
         val sent = Json.parseToJsonElement(server.takeRequest().body!!.utf8()).jsonObject["events"]!!.jsonArray
         assertEquals(3, sent.size)
+    }
+
+    @Test
+    fun resolvedLabelIsSentWithTheEvent() {
+        pair()
+        buffer(1)
+        server.enqueue(json(200, ingest("""{"index":0,"status":"accepted"}""")))
+        val labeled =
+            EventSync(
+                dao,
+                setup,
+                { DeviceApiClient(it, client) },
+                clock = { NOW_MILLIS },
+                labelFor = { "Alpha" },
+            )
+
+        assertEquals(SyncResult.Done, labeled.upload())
+
+        val sent = Json.parseToJsonElement(server.takeRequest().body!!.utf8()).jsonObject["events"]!!.jsonArray
+        assertEquals("Alpha", sent[0].jsonObject["label"]?.jsonPrimitive?.content)
     }
 
     @Test

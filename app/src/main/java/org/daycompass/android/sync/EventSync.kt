@@ -54,6 +54,7 @@ class EventSync(
     private val clientFor: (HttpUrl) -> DeviceApiClient = { DeviceApiClient(it) },
     private val logRejections: (Map<String, Int>) -> Unit = {},
     private val clock: () -> Long = System::currentTimeMillis,
+    private val labelFor: (String) -> String? = { null },
 ) {
     @Synchronized
     fun upload(): SyncResult {
@@ -84,7 +85,8 @@ class EventSync(
         // 500 events stay far below the 512 KiB body limit: each is a few hundred bytes at most.
         val batch = dao.oldestEvents(DeviceApiClient.MAX_BATCH_EVENTS)
         if (batch.isEmpty()) return SyncResult.Done
-        return when (val result = client.sendEvents(token, batch.map(BufferedEvent::toEvent))) {
+        val events = batch.map { it.toEvent().copy(label = labelFor(it.appId)) }
+        return when (val result = client.sendEvents(token, events)) {
             is ApiResult.Success -> {
                 val rejected =
                     result.value.outcomes
